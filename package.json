@@ -1,0 +1,22 @@
+{
+  "name": "mcp-technitium-dns",
+  "version": "0.0.1",
+  "description": "Safety-focused MCP server for Technitium DNS Server management.",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "check": "node --check src/index.js && node --test",
+    "build-info": "node scripts/write-build-info.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "json5": "^2.2.3",
+    "zod": "^3.25.76"
+  }
+}

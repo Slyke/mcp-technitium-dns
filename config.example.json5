@@ -1,0 +1,119 @@
+// Copy to data/config.json5 for local use. Environment variables override these values.
+// Do not commit real config.json5 files with secrets.
+{
+  // The MCP server itself defaults to HTTPS. Enable HTTP only when the MCP server
+  // is already protected by a trusted local network, tunnel, or reverse proxy.
+  http: {
+    enabled: false,
+    host: "0.0.0.0",
+    port: 3000,
+  },
+
+  https: {
+    enabled: true,
+    host: "0.0.0.0",
+    port: 3443,
+  },
+
+  auth: {
+    // Named MCP bearer tokens. readBearerTokens can call read-only tools only.
+    readBearerTokens: [
+      { name: "reader1", token: "replace-read-token" },
+      // { name: "reader-file", tokenFile: "./data/mcp-reader.token" },
+    ],
+    readWriteBearerTokens: [
+      { name: "admin1", token: "replace-readwrite-token" },
+      // { name: "admin-file", tokenFile: "./data/mcp-admin.token" },
+    ],
+    healthchecks: false,
+  },
+
+  technitium: {
+    baseUrl: "https://technitium.lan:53443",
+    apiToken: "replace-technitium-api-token",
+    // Prefer apiTokenFile for production:
+    // apiTokenFile: "./data/technitium-api.token",
+    timeoutMs: 10000,
+    tlsRejectUnauthorized: true,
+
+    // Explicit HTTP opt-in for Technitium targets on local/private networks.
+    // HTTP targets are rejected unless this is true and the target host is local/private.
+    allowHttpLocal: false,
+    allowHttpHostnames: [],
+  },
+
+  readOnly: false,
+  includeRawDefault: false,
+  readyCheckTechnitium: false,
+  certsDir: "./data/certs",
+
+  storage: {
+    backupDir: "./data/backups",
+    importDir: "./data/imports",
+  },
+
+  audit: {
+    enabled: true,
+    file: "./data/audit.jsonl",
+    recordReads: false,
+    // 0 disables pruning. When set, the newest entries are kept.
+    maxEntries: 0,
+  },
+
+  rateLimits: {
+    read: {
+      max: 120,
+      windowMs: 60000,
+    },
+    write: {
+      max: 30,
+      windowMs: 60000,
+    },
+    destructive: {
+      max: 5,
+      windowMs: 60000,
+    },
+  },
+
+  logging: {
+    sinks: {
+      console: {
+        enabled: true,
+        format: "json",
+        levels: ["info", "warn", "error"],
+      },
+      file: {
+        enabled: false,
+        format: "json",
+        path: "./logs/app.jsonl",
+        levels: ["warn", "error"],
+      },
+    },
+    gates: {
+      SERVICE_BOOT_DIAGNOSTICS: {
+        level: "info",
+        console: true,
+      },
+      MCP_TOOL_CALL: {
+        level: "info",
+        console: true,
+      },
+      RATE_LIMIT_BLOCKED: {
+        level: "warn",
+        console: true,
+      },
+      MCP_AUDIT_APPEND_FAILED: {
+        level: "warn",
+        console: true,
+      },
+      TECHNITIUM_API_REQUEST: {
+        level: "debug",
+        console: false,
+      },
+      TECHNITIUM_API_RESPONSE: {
+        level: "debug",
+        console: false,
+      },
+    },
+  },
+}

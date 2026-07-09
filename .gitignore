@@ -1,0 +1,10 @@
+node_modules/
+build-info.json
+data/config.json5
+data/history.json5
+data/audit.jsonl
+data/certs/server.crt
+data/certs/server.key
+logs/
+*.log
+.env

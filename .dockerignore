@@ -1,0 +1,7 @@
+node_modules
+.git
+.env
+data/config.json5
+data/history.json5
+data/audit.jsonl
+logs
