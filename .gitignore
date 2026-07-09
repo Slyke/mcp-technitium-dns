@@ -8,3 +8,5 @@ data/certs/server.key
 logs/
 *.log
 .env
+.env.*
+!.env.example

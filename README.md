@@ -61,7 +61,7 @@ Token files are also supported:
 [{ name: "reader1", tokenFile: "./data/mcp-reader.token" }]
 ```
 
-Copy `config.example.json5` to `data/config.json5` for file-based configuration. Environment variables override `data/config.json5`. `BACKUP_DIR` stores ZIP files created by `dns_backup_settings`; `IMPORT_DIR` is where ZIP files must be placed before `dns_restore_settings` or `dns_update_app` can read them.
+Copy `.env.example` to `.env` for environment-based local development, or copy `config.example.json5` to `data/config.json5` for file-based configuration. Environment variables override `data/config.json5`. `BACKUP_DIR` stores ZIP files created by `dns_backup_settings`; `IMPORT_DIR` is where ZIP files must be placed before `dns_restore_settings` or `dns_update_app` can read them.
 
 Set `AUDIT_RECORD_READS=true` or `audit.recordReads: true` to append read-only MCP calls to the audit file for troubleshooting. Audit entries store request metadata, identity name, tool name, redacted arguments, result count when available, and error code when a tool returns an error; they do not store unsanitized Technitium response bodies.
 
