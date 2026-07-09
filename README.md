@@ -252,6 +252,39 @@ approval_mode = "prompt"
 
 </details>
 
+<details>
+<summary>WSL2 environment variable troubleshooting</summary>
+
+Codex resolves `bearer_token_env_var` from the Codex host environment when the MCP server initializes. If the Technitium MCP tools do not appear, first verify that a fresh WSL2 launch can see the token without printing it:
+
+```powershell
+wsl.exe -d Ubuntu -- bash -lc '[ -n "$TECHNITIUM_DNS_MCP_TOKEN" ] && echo technitium=set || echo technitium=missing'
+```
+
+If that reports `missing`, but an already-open WSL shell reports `set`, the token is only available in that interactive shell. For Codex Desktop on Windows, set the token in the Windows user environment and forward it into WSL:
+
+```powershell
+[Environment]::SetEnvironmentVariable("TECHNITIUM_DNS_MCP_TOKEN", "replace-read-or-readwrite-token", "User")
+
+$current = [Environment]::GetEnvironmentVariable("WSLENV", "User")
+$entries = @("TECHNITIUM_DNS_MCP_TOKEN/u")
+$merged = (@($current -split ":" | Where-Object { $_ }) + $entries | Select-Object -Unique) -join ":"
+[Environment]::SetEnvironmentVariable("WSLENV", $merged, "User")
+```
+
+Restart Codex Desktop after changing user environment variables, then start a new task. Existing tasks usually will not gain newly initialized MCP tools.
+
+If you run Codex CLI from inside WSL instead, exporting the token before launching Codex is enough:
+
+```bash
+export TECHNITIUM_DNS_MCP_TOKEN="replace-read-or-readwrite-token"
+codex
+```
+
+If the token is visible but the tools still do not load, check the MCP URL, DNS resolution, and TLS trust separately. For private certificate authorities, configure Codex with a trusted PEM bundle through `CODEX_CA_CERTIFICATE` or `SSL_CERT_FILE`.
+
+</details>
+
 ## Tools
 
 Read-only tools:
