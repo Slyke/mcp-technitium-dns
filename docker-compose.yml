@@ -1,0 +1,34 @@
+services:
+  technitium-dns-mcp:
+    image: slyke/mcp-technitium-dns:latest # Change this if you want to self publish.
+    # build: # Uncomment this to build the image locally instead.
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: technitium-dns-mcp
+    restart: unless-stopped
+
+    ports:
+      - "3443:3443"
+
+    environment:
+      MCP_READ_BEARER_TOKENS: '[{name:"read-agent1",token:"read-token"}]' # Update/remove this.
+      MCP_READWRITE_BEARER_TOKENS: '[{name:"readwrite-agent1",token:"write-token"}]' # Update this - this is what your agent needs
+      TECHNITIUM_BASE_URL: "https://technitium.lan:53443" # Update this.
+      TECHNITIUM_API_TOKEN: "replace-me" # Update this.
+      HTTPS_ENABLED: "true"
+      HTTP_ENABLED: "false"
+      READY_CHECK_TECHNITIUM: "false"
+
+    healthcheck: # You can remove the health check if you don't want/need it.
+      test:
+        - CMD-SHELL
+        - >
+          curl --insecure --fail --silent
+          https://localhost:3443/healthz > /dev/null
+          &&
+          curl --insecure --fail --silent
+          https://localhost:3443/readyz > /dev/null
+      interval: 60s
+      timeout: 15s
+      retries: 5
+      start_period: 20s
