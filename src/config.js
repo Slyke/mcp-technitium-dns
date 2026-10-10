@@ -8,6 +8,7 @@ const DEFAULT_AUDIT_FILE = "./data/audit.jsonl";
 const DEFAULT_CERTS_DIR = "./data/certs";
 const DEFAULT_BACKUP_DIR = "./data/backups";
 const DEFAULT_IMPORT_DIR = "./data/imports";
+const DEFAULT_SECRET_OUTPUT_DIR = "./data/secret-output";
 
 const parseBoolean = ({ value, fallback = false }) => {
   if (value === undefined || value === null || value === "") {
@@ -488,6 +489,13 @@ export const loadConfig = ({
         envKey: "IMPORT_DIR",
         configPath: "storage.importDir",
         fallback: DEFAULT_IMPORT_DIR
+      }))),
+      secretOutputDir: path.resolve(cwd, String(envOrConfig({
+        env,
+        config: fileConfig,
+        envKey: "SECRET_OUTPUT_DIR",
+        configPath: "storage.secretOutputDir",
+        fallback: DEFAULT_SECRET_OUTPUT_DIR
       })))
     },
     readyCheckTechnitium: parseBoolean({

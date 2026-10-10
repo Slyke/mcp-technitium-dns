@@ -290,6 +290,13 @@ export const sessionListSchema = {
   ...includeRawField
 };
 
+export const apiTokenCreateFileSchema = {
+  user: z.string().trim().min(1).max(128),
+  token_name: z.string().trim().min(1).max(128),
+  file_name: safeNameSchema,
+  confirm: z.boolean()
+};
+
 export const sessionDeleteSchema = {
   partial_token: z.string().trim().min(4).max(128),
   confirm: z.boolean(),
