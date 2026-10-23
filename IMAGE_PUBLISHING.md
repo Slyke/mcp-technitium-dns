@@ -7,7 +7,7 @@ USERNAME=YOURUSERNAME
 DOMAIN=registry.example.com
 IMAGE_NAME=mcp-technitium-dns
 # VERSION="dev"
-VERSION=v0.0.1
+VERSION=v0.0.2
 
 git tag -a "$VERSION" -m "$VERSION"
 # git tag -d "$VERSION"

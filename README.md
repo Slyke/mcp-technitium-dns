@@ -422,6 +422,8 @@ Use `/mcp` in the Codex TUI to confirm the server is connected. `codex mcp add` 
 
 ## Development
 
+Use Node.js 24 LTS or newer.
+
 ```bash
 npm install
 npm test
@@ -435,7 +437,7 @@ Health endpoints return:
 ```json
 {
   "ok": true,
-  "version": "0.1.0",
+  "version": "0.0.2",
   "buildHash": "unknown",
   "readOnly": false
 }
