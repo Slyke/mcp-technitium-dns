@@ -2,12 +2,37 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { z } from "zod";
 import {
+  apiTokenCreateFileSchema,
   appDownloadUpdateSchema,
   dhcpReservedLeaseSchema,
   dnssecRolloverSchema,
   restoreSettingsSchema
 } from "../src/extraValidators.js";
 import { assertAnyLeaseIdentity } from "../src/tools/extraShared.js";
+
+test("API token file schema accepts a bounded secret-output request", () => {
+  const schema = z.object(apiTokenCreateFileSchema);
+  const result = schema.safeParse({
+    user: "homepage",
+    token_name: "homepage",
+    file_name: "homepage-technitium-api-token",
+    confirm: true
+  });
+
+  assert.equal(result.success, true);
+});
+
+test("API token file schema rejects path traversal file names", () => {
+  const schema = z.object(apiTokenCreateFileSchema);
+  const result = schema.safeParse({
+    user: "homepage",
+    token_name: "homepage",
+    file_name: "../token",
+    confirm: true
+  });
+
+  assert.equal(result.success, false);
+});
 
 test("restore settings schema rejects path traversal file names", () => {
   const schema = z.object(restoreSettingsSchema);

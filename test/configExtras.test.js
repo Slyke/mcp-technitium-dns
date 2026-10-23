@@ -14,7 +14,8 @@ test("audit max entries and storage directories are configurable", () => {
       ...requiredEnv,
       AUDIT_MAX_ENTRIES: "25",
       BACKUP_DIR: "./backup-output",
-      IMPORT_DIR: "./import-input"
+      IMPORT_DIR: "./import-input",
+      SECRET_OUTPUT_DIR: "./secret-output"
     },
     cwd: "/tmp/mcp-technitium-config",
     requireRequired: true
@@ -23,4 +24,5 @@ test("audit max entries and storage directories are configurable", () => {
   assert.equal(config.audit.maxEntries, 25);
   assert.equal(config.storage.backupDir.split(String.fromCharCode(92)).join("/").endsWith("mcp-technitium-config/backup-output"), true);
   assert.equal(config.storage.importDir.split(String.fromCharCode(92)).join("/").endsWith("mcp-technitium-config/import-input"), true);
+  assert.equal(config.storage.secretOutputDir.split(String.fromCharCode(92)).join("/").endsWith("mcp-technitium-config/secret-output"), true);
 });

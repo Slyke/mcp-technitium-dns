@@ -50,6 +50,7 @@
   storage: {
     backupDir: "./data/backups",
     importDir: "./data/imports",
+    secretOutputDir: "./data/secret-output",
   },
 
   audit: {

@@ -30,6 +30,35 @@ Target: Technitium DNS Server with API-token based automation.
 
 The API token is passed to Technitium as `Authorization: Bearer <token>`. Do not configure your Technitium username/password in this MCP server.
 
+### Create a one-time API token directly into a private server-side file
+
+For a pre-existing, appropriately authorized Technitium user, administrators can
+optionally call the write-only `dns_create_api_token_file` MCP tool with a request
+such as:
+
+```json
+{"user":"automation-user","token_name":"integration-token","file_name":"integration-token.secret","confirm":true}
+```
+
+The tool is registered only with `READ_ONLY=false`; use a readwrite MCP bearer
+identity and a Technitium credential that is permitted to create/revoke sessions.
+It reserves the output file before creating a **non-expiring** API token.
+`SECRET_OUTPUT_DIR` (or `storage.secretOutputDir` in JSON5) selects the
+server-local destination directory; the default is `./data/secret-output`.
+This directory is created with mode `0700`, must not itself be a symlink, and
+the one-time token is written to a new, non-overwritten file with mode `0600`.
+The tool accepts only a file name, not a path, and returns non-secret metadata,
+not the token value. If running in Docker, explicitly mount and secure the
+destination directory so the intended consumer can read the file without
+exposing it through MCP.
+
+A failed disk write may leave a token active in Technitium. The tool attempts
+to find and revoke the newly created token, but if this cannot be confirmed
+it returns `outcome_unknown`. **Do not blindly retry**; inspect Technitium's
+API-token sessions and revoke the uncertain token first. Review expiration
+and secret rotation requirements before using non-expiring API tokens in
+production.
+
 ## Safety Model
 
 - HTTPS is the default for this MCP server.

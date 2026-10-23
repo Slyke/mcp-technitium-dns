@@ -444,6 +444,22 @@ export const createTechnitiumClient = ({ config, logger }) => {
     disableDhcpScope: ({ form = {}, requestId }) => post({ path: "/api/dhcp/scopes/disable", form, requestId }),
     deleteDhcpScope: ({ form = {}, requestId }) => post({ path: "/api/dhcp/scopes/delete", form, requestId }),
     listSessions: ({ query: sessionQuery = {}, requestId } = {}) => get({ path: "/api/admin/sessions/list", query: sessionQuery, requestId }),
+    createAdminApiToken: async ({ form = {}, requestId }) => {
+      const raw = await post({
+        path: "/api/admin/sessions/createToken",
+        form,
+        requestId,
+        sanitizeResponse: false
+      });
+      const token = raw?.response?.token ?? raw?.token;
+      if (token === undefined || token === null || token === "") {
+        throw new TechnitiumClientError({
+          message: "Technitium did not return the created API token.",
+          path: "/api/admin/sessions/createToken"
+        });
+      }
+      return String(token);
+    },
     deleteSession: ({ form = {}, requestId }) => post({ path: "/api/admin/sessions/delete", form, requestId }),
     listLogFiles: ({ query: logQuery = {}, requestId } = {}) => get({ path: "/api/logs/list", query: logQuery, requestId }),
     downloadLogFile: ({ query: logQuery = {}, requestId }) => get({ path: "/api/logs/download", query: logQuery, requestId, responseType: "text" }),
